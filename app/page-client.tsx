@@ -1,24 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AdSenseBanner } from '@/components/adsense-banner';
 import { Brain, Trophy, Clock, Zap } from 'lucide-react';
-import { getTranslation, getCurrentLanguage } from '@/lib/translations';
+import { useLanguage } from '@/components/language-provider';
 
 export function HomePageClient() {
-  const [t, setT] = useState(getTranslation('en'));
-
-  useEffect(() => {
-    const lang = getCurrentLanguage();
-    setT(getTranslation(lang));
-  }, []);
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          {/* <AdSenseBanner position="top" /> */}
+          {process.env.NODE_ENV === 'production' && <AdSenseBanner position="top" />}
         </div>
 
         <div className="text-center mb-16">
@@ -112,7 +106,7 @@ export function HomePageClient() {
         </div>
 
         <div className="mb-8">
-          {/* <AdSenseBanner position="bottom" /> */}
+          {process.env.NODE_ENV === 'production' && <AdSenseBanner position="bottom" />}
         </div>
       </div>
     </div>

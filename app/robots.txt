@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# 阻止爬虫访问特定页面或目录
+Disallow: /api/
+Disallow: /private/
+
+# 阻止搜索引擎索引某些页面
+Disallow: /play?difficulty=*
+
+# 指向站点地图
+Sitemap: https://www.playsudokunow.online/sitemap.xml

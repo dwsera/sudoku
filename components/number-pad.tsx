@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getTranslation } from '@/lib/translations';
+import { useLanguage } from './language-provider';
 
 interface NumberPadProps {
   onNumberSelect: (num: number) => void;
@@ -9,16 +8,7 @@ interface NumberPadProps {
 }
 
 export function NumberPad({ onNumberSelect, onClear }: NumberPadProps) {
-  // 初始使用英文，然后在客户端水合后更新
-  const [t, setT] = useState(getTranslation('en'));
-  
-  useEffect(() => {
-    // 在客户端水合后获取当前语言设置
-    if (typeof window !== 'undefined') {
-      const lang = localStorage.getItem('language') || 'en';
-      setT(getTranslation(lang));
-    }
-  }, []);
+  const { t } = useLanguage();
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-3 gap-2">

@@ -4,16 +4,18 @@ import { useState, useEffect, useCallback } from 'react';
 import { SudokuGridComponent } from '@/components/sudoku-grid';
 import { NumberPad } from '@/components/number-pad';
 import { Calendar, Trophy, Clock } from 'lucide-react';
-import { getTranslation } from '@/lib/translations';
+import { useLanguage } from '@/components/language-provider';
 import {
   generateDailyPuzzle,
   validateMove,
   checkComplete,
+  getSolution,
   SudokuGrid,
   Difficulty
 } from '@/lib/sudoku';
 
 export default function DailyChallengePage() {
+  const { t } = useLanguage();
   const [grid, setGrid] = useState<SudokuGrid | null>(null);
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [difficulty] = useState<Difficulty>('medium');
@@ -21,16 +23,8 @@ export default function DailyChallengePage() {
   const [errors, setErrors] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
-  // 初始使用英文，然后在客户端水合后更新
-  const [t, setT] = useState(getTranslation('en'));
-  
-  useEffect(() => {
-    // 在客户端水合后获取当前语言设置
-    if (typeof window !== 'undefined') {
-      const lang = localStorage.getItem('language') || 'en';
-      setT(getTranslation(lang));
-    }
-  }, []);
+  const [showSolution, setShowSolution] = useState(false);
+  const [solutionGrid, setSolutionGrid] = useState<SudokuGrid | null>(null);
 
   useEffect(() => {
     const today = new Date();
@@ -115,6 +109,13 @@ export default function DailyChallengePage() {
     localStorage.setItem(`sudoku-daily-${dateKey}`, JSON.stringify(completionData));
   };
 
+  const toggleSolution = () => {
+    if (!showSolution && !solutionGrid && grid) {
+      setSolutionGrid(getSolution(grid));
+    }
+    setShowSolution(!showSolution);
+  };
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -137,9 +138,9 @@ export default function DailyChallengePage() {
             <Calendar className="w-8 h-8 text-purple-600" />
             <h1 className="text-4xl font-bold text-gray-900">{t.dailyChallenge.title}</h1>
           </div>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600" suppressHydrationWarning>
             {currentDate.toLocaleDateString(
-              typeof window !== 'undefined' ? localStorage.getItem('language') || 'en' : 'en', {
+              localStorage.getItem('language') || 'en', {
               weekday: 'long',
               year: 'numeric',
               month: 'long',
@@ -167,16 +168,16 @@ export default function DailyChallengePage() {
         )}
 
         <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 flex flex-col items-center gap-6">
-            <SudokuGridComponent
-              grid={grid}
-              selectedCell={selectedCell}
-              onCellClick={handleCellClick}
-            />
-            <div className="lg:hidden">
-              <NumberPad onNumberSelect={handleNumberSelect} onClear={handleClear} />
+            <div className="lg:col-span-2 flex flex-col items-center gap-6">
+                <SudokuGridComponent
+                grid={showSolution && solutionGrid ? solutionGrid : grid}
+                selectedCell={selectedCell}
+                onCellClick={handleCellClick}
+              />
+              <div className="lg:hidden">
+                <NumberPad onNumberSelect={handleNumberSelect} onClear={handleClear} />
+              </div>
             </div>
-          </div>
 
           <div className="flex flex-col gap-6">
             <div className="bg-white rounded-lg shadow-md p-6">
@@ -187,12 +188,18 @@ export default function DailyChallengePage() {
               <div className="space-y-4">
                 <div>
                   <div className="text-sm text-gray-600">{t.play.time}</div>
-                  <div className="text-3xl font-bold text-gray-900">{formatTime(time)}</div>
+                  <div className="text-3xl font-bold text-gray-900" suppressHydrationWarning>{formatTime(time)}</div>
                 </div>
                 <div>
                   <div className="text-sm text-gray-600">{t.play.errors}</div>
-                  <div className="text-3xl font-bold text-red-600">{errors}</div>
+                  <div className="text-3xl font-bold text-red-600" suppressHydrationWarning>{errors}</div>
                 </div>
+                <button
+                  onClick={toggleSolution}
+                  className={`w-full py-3 rounded-lg font-semibold transition-colors ${showSolution ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white`}
+                >
+                  {showSolution ? t.play.hideAnswer : t.play.showAnswer}
+                </button>
                 <div>
                   <div className="text-sm text-gray-600">{t.play.difficulty}</div>
                   <div className="text-lg font-semibold text-gray-900 capitalize">

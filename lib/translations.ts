@@ -50,6 +50,8 @@ export const translations = {
       newGame: 'New Game',
       getHint: 'Get Hint',
       clear: 'Clear',
+      showAnswer: 'Show Answer',
+      hideAnswer: 'Hide Answer',
     },
     dailyChallenge: {
       title: 'Daily Challenge',
@@ -155,6 +157,8 @@ export const translations = {
       newGame: '新游戏',
       getHint: '获取提示',
       clear: '清除',
+      showAnswer: '查看答案',
+      hideAnswer: '隐藏答案',
     },
     dailyChallenge: {
       title: '每日挑战',
@@ -260,6 +264,8 @@ export const translations = {
       newGame: '新しいゲーム',
       getHint: 'ヒントを取得',
       clear: 'クリア',
+      showAnswer: '答えを表示',
+      hideAnswer: '答えを非表示',
     },
     dailyChallenge: {
       title: 'デイリーチャレンジ',
@@ -365,6 +371,8 @@ export const translations = {
       newGame: 'Nuevo Juego',
       getHint: 'Obtener Pista',
       clear: 'Borrar',
+      showAnswer: 'Mostrar respuesta',
+      hideAnswer: 'Ocultar respuesta',
     },
     dailyChallenge: {
       title: 'Desafío Diario',
@@ -470,6 +478,8 @@ export const translations = {
       newGame: 'Nouveau Jeu',
       getHint: 'Obtenir un Indice',
       clear: 'Effacer',
+      showAnswer: 'Afficher la solution',
+      hideAnswer: 'Cacher la solution',
     },
     dailyChallenge: {
       title: 'Défi Quotidien',
@@ -575,6 +585,8 @@ export const translations = {
       newGame: 'Neues Spiel',
       getHint: 'Hinweis Erhalten',
       clear: 'Löschen',
+      showAnswer: 'Lösung anzeigen',
+      hideAnswer: 'Lösung ausblenden',
     },
     dailyChallenge: {
       title: 'Tägliche Herausforderung',

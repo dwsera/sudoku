@@ -8,29 +8,35 @@ import {
   generateSudoku,
   validateMove,
   checkComplete,
+  getSolution,
   SudokuGrid,
   Difficulty
 } from '@/lib/sudoku';
-import { getTranslation } from '@/lib/translations';
+import { useLanguage } from '@/components/language-provider';
 
 export default function PlayPage() {
+  const { t } = useLanguage();
   const [grid, setGrid] = useState<SudokuGrid>(() => generateSudoku('medium'));
+  const [solution, setSolution] = useState<SudokuGrid | null>(null);
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>('medium');
   const [time, setTime] = useState(0);
   const [errors, setErrors] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  // 初始使用英文，然后在客户端水合后更新
-  const [t, setT] = useState(getTranslation('en'));
+  const [showSolution, setShowSolution] = useState(false);
   
   useEffect(() => {
-    // 在客户端水合后获取当前语言设置
-    if (typeof window !== 'undefined') {
-      const lang = localStorage.getItem('language') || 'en';
-      setT(getTranslation(lang));
-    }
-  }, []);
+    const newGrid = generateSudoku(difficulty);
+    setGrid(newGrid);
+    setSolution(null);
+    setSelectedCell(null);
+    setTime(0);
+    setErrors(0);
+    setIsComplete(false);
+    setIsPaused(false);
+    setShowSolution(false);
+  }, [difficulty]);
 
   useEffect(() => {
     if (!isComplete && !isPaused) {
@@ -95,22 +101,27 @@ export default function PlayPage() {
   };
 
   const handleNewGame = useCallback(() => {
-    setGrid(generateSudoku(difficulty));
+    const newGrid = generateSudoku(difficulty);
+    setGrid(newGrid);
+    setSolution(null);
     setSelectedCell(null);
     setTime(0);
     setErrors(0);
     setIsComplete(false);
     setIsPaused(false);
+    setShowSolution(false);
   }, [difficulty]);
+  
+  const handleShowSolution = () => {
+    if (!showSolution && !solution && grid) {
+      setSolution(getSolution(grid));
+    }
+    setShowSolution(!showSolution);
+  };
 
   const handleDifficultyChange = (newDifficulty: Difficulty) => {
     setDifficulty(newDifficulty);
-    setGrid(generateSudoku(newDifficulty));
-    setSelectedCell(null);
-    setTime(0);
-    setErrors(0);
-    setIsComplete(false);
-    setIsPaused(false);
+    // useEffect will handle grid update
   };
 
   const handleHint = () => {
@@ -136,6 +147,8 @@ export default function PlayPage() {
     }
   };
 
+  // toggleSolution function is replaced by handleShowSolution
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
       <div className="max-w-7xl mx-auto">
@@ -148,7 +161,7 @@ export default function PlayPage() {
             <h2 className="text-2xl font-bold text-green-800 mb-2">
             {t.play.congratulations}
           </h2>
-          <p className="text-green-700">
+          <p className="text-green-700" suppressHydrationWarning>
             {t.play.completedIn} {Math.floor(time / 60)}:{(time % 60).toString().padStart(2, '0')}
           </p>
           </div>
@@ -157,7 +170,7 @@ export default function PlayPage() {
         <div className="flex flex-col lg:flex-row gap-8 items-start justify-center">
           <div className="flex flex-col items-center gap-6">
             <SudokuGridComponent
-              grid={grid}
+              grid={showSolution && solution ? solution : grid}
               selectedCell={selectedCell}
               onCellClick={handleCellClick}
             />
@@ -174,6 +187,8 @@ export default function PlayPage() {
               onDifficultyChange={handleDifficultyChange}
               onNewGame={handleNewGame}
               onHint={handleHint}
+              onShowSolution={handleShowSolution}
+              showSolution={showSolution}
             />
             <div className="hidden lg:block">
               <NumberPad onNumberSelect={handleNumberSelect} onClear={handleClear} />

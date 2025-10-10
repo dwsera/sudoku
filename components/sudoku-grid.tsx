@@ -50,6 +50,7 @@ export function SudokuGridComponent({ grid, selectedCell, onCellClick }: SudokuG
               className={getCellClassName(cell, rowIndex, colIndex)}
               onClick={() => onCellClick(rowIndex, colIndex)}
               disabled={cell.isFixed}
+              suppressHydrationWarning
             >
               {cell.value !== 0 ? cell.value : ''}
             </button>

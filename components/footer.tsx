@@ -1,20 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { getTranslation } from '@/lib/translations';
+import { useLanguage } from './language-provider';
 
 export function Footer() {
-  // 初始始终使用英文，避免hydration错误
-  const [t, setT] = useState(getTranslation('en'));
-
-  useEffect(() => {
-    // 在客户端水合后再获取语言设置
-    if (typeof window !== 'undefined') {
-      const lang = localStorage.getItem('language') || 'en';
-      setT(getTranslation(lang));
-    }
-  }, []);
+  const { t } = useLanguage();
 
   return (
     <footer className="bg-gray-900 text-white mt-auto">

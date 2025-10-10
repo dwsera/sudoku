@@ -3,8 +3,7 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { BookOpen, Target, Lightbulb, Trophy, Brain } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { getTranslation } from '@/lib/translations';
+import { useLanguage } from '@/components/language-provider';
 
 // 由于使用了'use client'，我们不能导出静态metadata
 // 但Next.js仍然会自动处理页面标题，我们已经在组件中设置了翻译后的标题
@@ -28,16 +27,7 @@ const iconColorClasses = {
 };
 
 export default function TutorialsPage() {
-  // 初始使用英文，然后在客户端水合后更新
-  const [t, setT] = useState(getTranslation('en'));
-  
-  useEffect(() => {
-    // 在客户端水合后获取当前语言设置
-    if (typeof window !== 'undefined') {
-      const lang = localStorage.getItem('language') || 'en';
-      setT(getTranslation(lang));
-    }
-  }, []);
+  const { t } = useLanguage();
   
   // 根据翻译生成教程列表
   const tutorials = [

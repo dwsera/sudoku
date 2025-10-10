@@ -148,6 +148,27 @@ export function checkComplete(grid: SudokuGrid): boolean {
   return true;
 }
 
+// 获取数独的完整解决方案
+export function getSolution(grid: SudokuGrid): SudokuGrid {
+  // 转换为数字网格
+  const numberGrid = grid.map(row => 
+    row.map(cell => cell.isFixed ? cell.value : 0)
+  );
+  
+  // 深拷贝并求解
+  const solutionGrid = numberGrid.map(row => [...row]);
+  solveSudoku(solutionGrid);
+  
+  // 转换回SudokuGrid格式
+  return solutionGrid.map((row, i) => 
+    row.map((value, j) => ({
+      value,
+      isFixed: grid[i][j].isFixed,
+      isError: false
+    }))
+  );
+}
+
 export function generateDailyPuzzle(date: Date, difficulty: Difficulty): SudokuGrid {
   const seed = date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
 
@@ -165,4 +186,25 @@ export function generateDailyPuzzle(date: Date, difficulty: Difficulty): SudokuG
   Math.random = originalRandom;
 
   return puzzle;
+}
+
+// 获取数独的完整解答
+export function getSudokuSolution(puzzleGrid: SudokuGrid): SudokuGrid {
+  // 将SudokuGrid转换为number[][]格式
+  const numberGrid = puzzleGrid.map(row => 
+    row.map(cell => cell.value)
+  );
+  
+  // 创建深拷贝并解决
+  const solutionGrid = numberGrid.map(row => [...row]);
+  solveSudoku(solutionGrid);
+  
+  // 转换回SudokuGrid格式
+  return solutionGrid.map((row, i) =>
+    row.map((value, j) => ({
+      value,
+      isFixed: puzzleGrid[i][j].isFixed,
+      isError: false
+    }))
+  );
 }

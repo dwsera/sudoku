@@ -36,7 +36,13 @@ export function LanguageSwitcher() {
     setCurrentLanguage(langCode);
     localStorage.setItem('language', langCode);
     setIsOpen(false);
-    window.location.reload();
+    
+    // 派发自定义事件，通知所有组件语言已更改
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('languageChanged', {
+        detail: { language: langCode }
+      }));
+    }
   };
 
   return (

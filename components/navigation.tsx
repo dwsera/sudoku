@@ -1,23 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useLanguage } from './language-provider';
 import { LanguageSwitcher } from './language-switcher';
-import { getTranslation } from '@/lib/translations';
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  // 初始始终使用英文，避免hydration错误
-  const [t, setT] = useState(getTranslation('en'));
-
-  useEffect(() => {
-    // 在客户端水合后再获取语言设置
-    if (typeof window !== 'undefined') {
-      const lang = localStorage.getItem('language') || 'en';
-      setT(getTranslation(lang));
-    }
-  }, []);
+  const { t } = useLanguage();
 
   const links = [
     { href: '/', label: t.nav.home },
