@@ -13,8 +13,8 @@ interface TutorialContentProps {
 export default function TutorialContent({ title, description, content }: TutorialContentProps) {
   const { currentLanguage } = useLanguage();
   // 确保 currentLanguage 有效，如果无效则使用 'en'
-  const validLanguage = translations[currentLanguage] ? currentLanguage : 'en';
-  const t = translations[validLanguage];
+  const validLanguage = ['en', 'zh', 'ja', 'es', 'fr', 'de'].includes(currentLanguage) ? currentLanguage : 'en';
+  const t = translations[validLanguage as 'en' | 'zh' | 'ja' | 'es' | 'fr' | 'de'];
   
   // 获取当前语言的标题，如果不存在则使用英语或原始字符串
   const currentTitle = typeof title === 'object' ? (title[validLanguage] || title.en || '') : title;
