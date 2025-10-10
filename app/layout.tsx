@@ -11,10 +11,12 @@ export const metadata: Metadata = {
   title: 'Play Free Sudoku Online | Sudoku Master',
   description: 'Enjoy free Sudoku puzzles with daily challenges. Play easy, medium, and hard Sudoku games online. Improve your logic and problem-solving skills.',
   keywords: 'sudoku, free sudoku, sudoku online, sudoku puzzles, daily sudoku, sudoku game, play sudoku, sudoku solver, sudoku tips, sudoku strategies',
-  author: {
-    name: 'Sudoku Master',
-    url: 'https://www.playsudokunow.online',
-  },
+  authors: [
+    {
+      name: 'Sudoku Master',
+      url: 'https://www.playsudokunow.online',
+    },
+  ],
   openGraph: {
     title: 'Play Free Sudoku Online | Sudoku Master',
     description: 'Enjoy free Sudoku puzzles with daily challenges. Play easy, medium, and hard Sudoku games online. Improve your logic and problem-solving skills.',
