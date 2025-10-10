@@ -18,7 +18,7 @@ export function AdSenseBanner({ position }: AdSenseBannerProps) {
       document.head.appendChild(script);
       
       // 初始化googletag对象
-      window.googletag = window.googletag || {};
+      window.googletag = window.googletag || {} as Googletag;
       window.googletag.cmd = window.googletag.cmd || [];
       
       // 定义广告单元
@@ -30,16 +30,22 @@ export function AdSenseBanner({ position }: AdSenseBannerProps) {
           bottom: '/123456789/bottom_banner' // 替换为您的广告单元ID
         };
         
-        window.googletag.defineSlot(adUnits[position], [[728, 90], [300, 250], [336, 280]], `ad-${position}`).addService(window.googletag.pubads());
-        window.googletag.pubads().enableSingleRequest();
-        window.googletag.enableServices();
+        // 安全访问googletag
+        if (window.googletag) {
+          window.googletag.defineSlot(adUnits[position], [[728, 90], [300, 250], [336, 280]], `ad-${position}`).addService(window.googletag.pubads());
+          window.googletag.pubads().enableSingleRequest();
+          window.googletag.enableServices();
+        }
       });
     }
     
     // 加载广告
     if (typeof window !== 'undefined' && window.googletag) {
       window.googletag.cmd.push(() => {
-        window.googletag.display(`ad-${position}`);
+        // 安全访问googletag
+        if (window.googletag) {
+          window.googletag.display(`ad-${position}`);
+        }
       });
     }
   }, [position]);

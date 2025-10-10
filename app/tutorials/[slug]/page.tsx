@@ -24,9 +24,13 @@ export async function generateMetadata({
     };
   }
 
+  // 处理多语言标题和描述，默认为英语
+  const title = typeof tutorial.title === 'string' ? tutorial.title : tutorial.title.en || 'Tutorial';
+  const description = typeof tutorial.description === 'string' ? tutorial.description : tutorial.description.en || 'Tutorial description';
+
   return {
-    title: tutorial.title,
-    description: tutorial.description,
+    title: title,
+    description: description,
     keywords: tutorial.keywords,
   };
 }
