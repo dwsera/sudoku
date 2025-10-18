@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLanguage } from '@/components/language-provider';
 import { translations } from '@/lib/translations';
+import { AdSenseBanner } from '@/components/adsense-banner';
 
 interface TutorialContentProps {
   title: Record<string, string> | string;
@@ -36,6 +37,11 @@ export default function TutorialContent({ title, description, content }: Tutoria
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
+        {process.env.NODE_ENV === 'production' && (
+          <div className="mb-8">
+            <AdSenseBanner position="top" />
+          </div>
+        )}
         <Link
           href="/tutorials"
           className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 font-medium"
@@ -79,6 +85,12 @@ export default function TutorialContent({ title, description, content }: Tutoria
             </Link>
           </div>
         </article>
+        
+        {process.env.NODE_ENV === 'production' && (
+          <div className="mt-12">
+            <AdSenseBanner position="bottom" />
+          </div>
+        )}
       </div>
     </div>
   );

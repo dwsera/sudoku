@@ -13,6 +13,7 @@ import {
   Difficulty
 } from '@/lib/sudoku';
 import { useLanguage } from '@/components/language-provider';
+import { AdSenseBanner } from '@/components/adsense-banner';
 
 export default function PlayPage() {
   const { t } = useLanguage();
@@ -155,6 +156,9 @@ export default function PlayPage() {
         <h1 className="text-4xl font-bold text-center mb-8 text-gray-900">
           {t.play.title}
         </h1>
+        
+        {/* 顶部广告位 */}
+        {process.env.NODE_ENV === 'production' && <AdSenseBanner position="top" />}
 
         {isComplete && (
           <div className="bg-green-100 border-2 border-green-500 rounded-lg p-6 mb-8 text-center max-w-md mx-auto">
@@ -206,6 +210,9 @@ export default function PlayPage() {
             <li>{t.play.instruction5}</li>
           </ul>
         </div>
+        
+        {/* 底部广告位 */}
+        {process.env.NODE_ENV === 'production' && <AdSenseBanner position="bottom" />}
       </div>
     </div>
   );

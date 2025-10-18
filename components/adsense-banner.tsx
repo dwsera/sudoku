@@ -13,8 +13,8 @@ export function AdSenseBanner({ position }: AdSenseBannerProps) {
       // 异步加载Google AdSense脚本
       const script = document.createElement('script');
       script.async = true;
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-      script.setAttribute('data-ad-client', 'ca-pub-2563164931075294'); // 替换为您的AdSense发布者ID
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2563164931075294';
+      script.crossOrigin = 'anonymous';
       document.head.appendChild(script);
       
       // 初始化googletag对象
@@ -56,18 +56,41 @@ export function AdSenseBanner({ position }: AdSenseBannerProps) {
     bottom: 'w-full h-24'
   };
 
+  // 根据位置使用不同的广告单元ID和格式
+  const adConfig = {
+    top: {
+      slot: '1234567890',
+      format: 'horizontal',
+      className: 'display:block; width:100%; height:auto;'
+    },
+    sidebar: {
+      slot: '2345678901',
+      format: 'vertical',
+      className: 'display:block; width:100%; height:600px;'
+    },
+    bottom: {
+      slot: '3456789012',
+      format: 'horizontal',
+      className: 'display:block; width:100%; height:auto;'
+    }
+  };
+
   return (
-    <div className={`${dimensions[position]} bg-gray-100 rounded-lg overflow-hidden`}>
+    <div className={`${dimensions[position]} bg-gray-100 rounded-lg overflow-hidden my-6`}>
       {/* 广告容器 */}
       <ins 
         className="adsbygoogle"
         style={{ display: 'block' }}
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" // 替换为您的AdSense发布者ID
-        data-ad-slot="1234567890" // 替换为默认广告单元ID
-        data-ad-format="auto"
+        data-ad-client="ca-pub-2563164931075294"
+        data-ad-slot={adConfig[position].slot}
+        data-ad-format={adConfig[position].format}
         data-full-width-responsive="true"
         id={`ad-${position}`}
       ></ins>
+      {/* Google AdSense自动广告脚本初始化 */}
+      <script>
+        {`(adsbygoogle = window.adsbygoogle || []).push({});`}
+      </script>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { SudokuGridComponent } from '@/components/sudoku-grid';
 import { NumberPad } from '@/components/number-pad';
 import { Calendar, Trophy, Clock } from 'lucide-react';
 import { useLanguage } from '@/components/language-provider';
+import { AdSenseBanner } from '@/components/adsense-banner';
 import {
   generateDailyPuzzle,
   validateMove,
@@ -133,6 +134,11 @@ export default function DailyChallengePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 py-8 px-4">
       <div className="max-w-7xl mx-auto">
+        {process.env.NODE_ENV === 'production' && (
+          <div className="mb-8">
+            <AdSenseBanner position="top" />
+          </div>
+        )}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Calendar className="w-8 h-8 text-purple-600" />
@@ -236,6 +242,12 @@ export default function DailyChallengePage() {
             <li>{t.dailyChallenge.tip5}</li>
           </ul>
         </div>
+        
+        {process.env.NODE_ENV === 'production' && (
+          <div className="mt-12">
+            <AdSenseBanner position="bottom" />
+          </div>
+        )}
       </div>
     </div>
   );

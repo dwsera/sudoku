@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { BookOpen, Target, Lightbulb, Trophy, Brain } from 'lucide-react';
 import { useLanguage } from '@/components/language-provider';
+import { AdSenseBanner } from '@/components/adsense-banner';
 
 // 由于使用了'use client'，我们不能导出静态metadata
 // 但Next.js仍然会自动处理页面标题，我们已经在组件中设置了翻译后的标题
@@ -71,6 +72,11 @@ export default function TutorialsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-12 px-4">
       <div className="max-w-5xl mx-auto">
+        {process.env.NODE_ENV === 'production' && (
+          <div className="mb-12">
+            <AdSenseBanner position="top" />
+          </div>
+        )}
         <h1 className="text-5xl font-bold text-center mb-6 text-gray-900">
           {t.tutorials.title}
         </h1>
@@ -111,6 +117,12 @@ export default function TutorialsPage() {
             <p>{t.tutorials.whyLearnDesc3}</p>
           </div>
         </div>
+        
+        {process.env.NODE_ENV === 'production' && (
+          <div className="mt-12">
+            <AdSenseBanner position="bottom" />
+          </div>
+        )}
       </div>
     </div>
   );
